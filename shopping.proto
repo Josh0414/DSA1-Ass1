@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package shopping;
+
+service ShoppingService {
+    // Admin operations
+    rpc AddProduct(Product) returns (ProductCode) {}          
+    rpc UpdateProduct(Product) returns (Product) {}          
+    rpc RemoveProduct(ProductCode) returns (ProductList) {}   
+    rpc ListAvailableProducts(Empty) returns (ProductList) {} 
+    rpc SearchProduct(ProductCode) returns (Product) {}       
+    rpc AddToCart(CartItem) returns (CartResponse) {}         
+    rpc PlaceOrder(UserId) returns (OrderResponse) {}         
+    rpc CreateUsers(stream User) returns (UsersCreatedResponse) {} 
+}
+
+message Empty {}
+
+message Product {
+    string sku = 1;
+    string name = 2;
+    string description = 3;
+    double price = 4;
+    string status = 5;
+}
+
+message ProductCode {
+    string code = 1;
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+    bool isAdmin = 3;
+}
+
+message UsersCreatedResponse {
+    int32 count = 1;  
+    repeated string userIds = 2; 
+}
+
+message ProductList {
+    repeated Product products = 1;  
+}
+
+message CartItem {
+    string userId = 1;  
+    string sku = 2;     
+}
+
+message CartResponse {
+    bool success = 1;   
+    string message = 2; 
+}
+
+message UserId {
+    string id = 1;  
+}
+
+message OrderResponse {
+    bool success = 1;    
+    string orderId = 2; 
+    string message = 3;  
+}
+
+message Order {
+    string orderId = 1; 
+    string userId = 2;
+    repeated CartItem items = 3;
+    double total_price = 4;
+}
